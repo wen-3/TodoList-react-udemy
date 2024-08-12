@@ -10,15 +10,16 @@ export interface Props {
   title: string;
   content: string;
   priority: Priority;
+  assignee?: string;
   resolved: boolean;
 }
 
-export const TodoItem: FC<Props>= ({ title, content, priority, resolved}) => {
+export const TodoItem: FC<Props> = ({ title, content, priority, resolved }) => {
   const color = resolved ? '' :
     priority === Priority.HIGH ? 'is-danger' :
-    priority === Priority.MEDIUM ? 'is-warning' :
-    priority === Priority.LOW ? 'is-info' :
-    'is-primary';
+      priority === Priority.MEDIUM ? 'is-warning' :
+        priority === Priority.LOW ? 'is-info' :
+          'is-primary';
 
   return (
     <article className={`message ${color}`}>

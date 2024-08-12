@@ -1,13 +1,13 @@
 import { ChangeEventHandler, FC, useState } from "react";
-import { Priority } from "./TodoItem";
+import { Priority, Props } from "./TodoItem";
 import teamMembers from './team-members.json';
 
-export const Editor: FC = () => {
-    const [title, setTitle] = useState<string>('');
-    const [priority, setPriority] = useState<Priority>(Priority.LOW);
-    const [assignee, setAssignee] = useState<string>('');
-    const [content, setContent] = useState<string>('');
-    const [resolved, setResolved] = useState<boolean>(false);
+export const Editor: FC<Props> = props => {
+    const [title, setTitle] = useState<string>(props.title);
+    const [priority, setPriority] = useState<Priority>(props.priority);
+    const [assignee, setAssignee] = useState<string>(props.assignee ?? '');
+    const [content, setContent] = useState<string>(props.content);
+    const [resolved, setResolved] = useState<boolean>(props.resolved);
 
     const handleTitleChange: ChangeEventHandler<HTMLInputElement> = e => setTitle(e.target.value);
     const handlePriorityChange: ChangeEventHandler<HTMLInputElement> = e => setPriority(parseInt(e.target.value));
