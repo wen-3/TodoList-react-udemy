@@ -1,11 +1,13 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 
 export const Editor: FC = () => {
+    const [title, setTitle] = useState<string>('');
+
     return (
         <div className="box">
             <div className="field">
                 <div className="control">
-                    <input type="text" className="input" placeholder="title" />
+                <input type="text" className="input" placeholder="title" value={title} onChange={e => setTitle(e.target.value)} />
                 </div>
             </div>
             <div className="columns is-vcentered">
