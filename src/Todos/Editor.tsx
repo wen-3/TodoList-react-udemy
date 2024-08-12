@@ -18,9 +18,16 @@ export const Editor: FC = () => {
                 <div className="column">
                     <div className="field">
                         <div className="control">
-                            <label className="radio"><input type="radio" checked={priority === 0} value={Priority.HIGH} onChange={handlePriorityChange} />High</label>
-                            <label className="radio"><input type="radio" checked={priority === 1} value={Priority.MEDIUM} onChange={handlePriorityChange} />Medium</label>
-                            <label className="radio"><input type="radio" checked={priority === 2} value={Priority.LOW} onChange={handlePriorityChange} />Low</label>
+                            {
+                                Object.entries(Priority)
+                                    .filter(([k, v]) => isNaN(Number(k)))
+                                    .map(([k, v]) => (
+                                        <label className="radio" key={k}>
+                                            <input type="radio" checked={priority === v} value={v} onChange={handlePriorityChange} />
+                                            {k}
+                                        </label>
+                                    ))
+                            }
                         </div>
                     </div>
                 </div>
