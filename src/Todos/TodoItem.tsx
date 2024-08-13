@@ -1,6 +1,7 @@
 import { faList, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { Editor } from './Editor';
 
 export enum Priority {
   HIGH,
@@ -18,38 +19,43 @@ export interface Props {
 }
 
 export const TodoItem: FC<Props> = ({ id, title, content, priority, assignee, resolved }) => {
+  const [editing, setEditing] = useState<boolean>(false);
   const color = resolved ? '' :
     priority === Priority.HIGH ? 'is-danger' :
       priority === Priority.MEDIUM ? 'is-warning' :
         priority === Priority.LOW ? 'is-info' :
           'is-primary';
+  const handleEditClick = () => setEditing(true);
+  const handleCancelClick = () => setEditing(false);
 
   return (
-    <article className={`message ${color}`}>
-      <div className="message-header">
-        <p>{title}</p>
-        <span>
-          <FontAwesomeIcon icon={faList} className='is-clickable mr-1' />
-          <FontAwesomeIcon icon={faTrashCan} className='is-clickable' />
-        </span>
-      </div>
-      <div className="message-body">
-        <div>
-          {content}
+    editing
+      ? <Editor {...{ id, title, content, priority, resolved, assignee, onCancel: handleCancelClick }} />
+      : <article className={`message ${color}`}>
+        <div className="message-header">
+          <p>{title}</p>
+          <span>
+            <FontAwesomeIcon icon={faList} className='is-clickable mr-1' onClick={handleEditClick} />
+            <FontAwesomeIcon icon={faTrashCan} className='is-clickable' />
+          </span>
         </div>
-        <div className="columns is-mobile">
-          <div className="column">
-            <span className="has-text-grey-light is-size-7">{id}</span>
+        <div className="message-body">
+          <div>
+            {content}
           </div>
-          <div className='column has-text-right'>
-            {
-              assignee
-                ? <span className="has-text-grey-light is-size-7">{`assigned to @${assignee}`}</span>
-                : null
-            }
+          <div className="columns is-mobile">
+            <div className="column">
+              <span className="has-text-grey-light is-size-7">{id}</span>
+            </div>
+            <div className='column has-text-right'>
+              {
+                assignee
+                  ? <span className="has-text-grey-light is-size-7">{`assigned to @${assignee}`}</span>
+                  : null
+              }
+            </div>
           </div>
         </div>
-      </div>
-    </article>
+      </article>
   );
 }
