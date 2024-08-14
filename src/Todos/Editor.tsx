@@ -1,27 +1,34 @@
 import { ChangeEventHandler, FC, useState } from "react";
-import { Priority, Props as TodoItemProps } from "./TodoItem";
+import { Priority } from "./TodoItem";
 import teamMembers from './team-members.json';
 
-interface Props extends TodoItemProps{
+export interface TodoItemModel {
+    title: string;
+    content: string;
+    priority: Priority;
+    assignee?: string;
+    resolved: boolean;
+}
+
+interface Props {
+    todo? : TodoItemModel;
+    onSave : (todo: TodoItemModel) => void;
     onCancel: () => void;
 }
 
 export const Editor: FC<Props> = props => {
-    const [title, setTitle] = useState<string>(props.title);
-    const [priority, setPriority] = useState<Priority>(props.priority);
-    const [assignee, setAssignee] = useState<string>(props.assignee ?? '');
-    const [content, setContent] = useState<string>(props.content);
-    const [resolved, setResolved] = useState<boolean>(props.resolved);
+    const [title, setTitle] = useState<string>(props.todo?.title ?? '');
+    const [priority, setPriority] = useState<Priority>(props.todo?.priority ?? Priority.LOW);
+    const [assignee, setAssignee] = useState<string>(props.todo?.assignee ?? '');
+    const [content, setContent] = useState<string>(props.todo?.content ?? '');
+    const [resolved, setResolved] = useState<boolean>(props.todo?.resolved ?? false);
 
     const handleTitleChange: ChangeEventHandler<HTMLInputElement> = e => setTitle(e.target.value);
     const handlePriorityChange: ChangeEventHandler<HTMLInputElement> = e => setPriority(parseInt(e.target.value));
     const handleAssigneeChange: ChangeEventHandler<HTMLSelectElement> = e => setAssignee(e.target.value);
     const handleContentChange: ChangeEventHandler<HTMLTextAreaElement> = e => setContent(e.target.value);
     const handleResolvedChange: ChangeEventHandler<HTMLInputElement> = e => setResolved(!resolved);
-    const handleSaveClick = () => {
-        props.updateTodo(props.id, { title, priority, assignee, content, resolved });
-        props.onCancel();
-    }
+    const handleSaveClick = () => props.onSave({ title, priority, assignee, content, resolved });
 
     return (
         <div className="box">

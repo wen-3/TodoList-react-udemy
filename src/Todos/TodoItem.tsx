@@ -1,7 +1,7 @@
 import { faList, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, useState } from 'react';
-import { Editor } from './Editor';
+import { Editor, TodoItemModel as EditorItemModel} from './Editor';
 import { TodoItemModel } from './utils/getTodoItems';
 
 export enum Priority {
@@ -29,36 +29,39 @@ export const TodoItem: FC<Props> = ({
   assignee,
   resolved,
   updateTodo,
-  deleteTodo 
-  }) => {
+  deleteTodo
+}) => {
   const [editing, setEditing] = useState<boolean>(false);
   const color = resolved ? '' :
     priority === Priority.HIGH ? 'is-danger' :
       priority === Priority.MEDIUM ? 'is-warning' :
         priority === Priority.LOW ? 'is-info' :
           'is-primary';
+
   const handleEditClick = () => setEditing(true);
+  const handleSaveClick = (todo: EditorItemModel) => { updateTodo(id, todo); setEditing(false); };
   const handleCancelClick = () => setEditing(false);
   const handleDeleteClick = () => deleteTodo(id);
 
   return (
     editing
       ? <Editor {...{
-        id,
-        title,
-        content,
-        priority,
-        resolved,
-        assignee,
-        updateTodo,
-        deleteTodo,
-        onCancel: handleCancelClick }} />
+        todo: {
+          title,
+          content,
+          priority,
+          resolved,
+          assignee,
+        },
+        onSave: handleSaveClick,
+        onCancel: handleCancelClick
+      }} />
       : <article className={`message ${color}`}>
         <div className="message-header">
           <p>{title}</p>
           <span>
             <FontAwesomeIcon icon={faList} className='is-clickable mr-1' onClick={handleEditClick} />
-            <FontAwesomeIcon icon={faTrashCan} className='is-clickable' onClick={handleDeleteClick}/>
+            <FontAwesomeIcon icon={faTrashCan} className='is-clickable' onClick={handleDeleteClick} />
           </span>
         </div>
         <div className="message-body">
