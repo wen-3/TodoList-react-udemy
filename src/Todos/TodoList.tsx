@@ -1,8 +1,10 @@
 import { FC, useState } from 'react';
 import { getTodoItems, TodoItemModel } from './utils/getTodoItems';
 import { TodoItem } from './TodoItem';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 
-const items = getTodoItems(10);
+const items = getTodoItems(1);
 
 export const TodoList: FC = () => {
     const [todos, setTodos] = useState<TodoItemModel[]>(items);
@@ -21,6 +23,13 @@ export const TodoList: FC = () => {
                         <TodoItem {...i} updateTodo={updateTodo} deleteTodo={deleteTodo}/>
                     </div>
                 ))}
+            </div>
+            <div>
+                <button className='button is-rounded is-primary is-medium'>
+                    <span className='icon'>
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                    </span>
+                </button>
             </div>
         </>
     );
