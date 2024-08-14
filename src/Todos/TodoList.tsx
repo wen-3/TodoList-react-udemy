@@ -9,13 +9,16 @@ export const TodoList: FC = () => {
     const updateTodo = (id: string, update: Partial<TodoItemModel>) => {
         setTodos(todos.map(i => i.id === id ? {...i, ...update} : i));
     };
+    const deleteTodo = (id: string) => {
+        setTodos(todos.filter(i => i.id !== id));
+    };
 
     return (
         <>
             <div className='columns is-multiline'>
                 {todos.map(i => (
                     <div className='column is-2' key={i.id}>
-                        <TodoItem {...i} updateTodo={updateTodo}/>
+                        <TodoItem {...i} updateTodo={updateTodo} deleteTodo={deleteTodo}/>
                     </div>
                 ))}
             </div>

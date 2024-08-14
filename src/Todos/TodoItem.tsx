@@ -18,9 +18,19 @@ export interface Props {
   assignee?: string;
   resolved: boolean;
   updateTodo: (id: string, update: Partial<TodoItemModel>) => void;
+  deleteTodo: (id: string) => void;
 }
 
-export const TodoItem: FC<Props> = ({ id, title, content, priority, assignee, resolved, updateTodo }) => {
+export const TodoItem: FC<Props> = ({
+  id,
+  title,
+  content,
+  priority,
+  assignee,
+  resolved,
+  updateTodo,
+  deleteTodo 
+  }) => {
   const [editing, setEditing] = useState<boolean>(false);
   const color = resolved ? '' :
     priority === Priority.HIGH ? 'is-danger' :
@@ -29,16 +39,26 @@ export const TodoItem: FC<Props> = ({ id, title, content, priority, assignee, re
           'is-primary';
   const handleEditClick = () => setEditing(true);
   const handleCancelClick = () => setEditing(false);
+  const handleDeleteClick = () => deleteTodo(id);
 
   return (
     editing
-      ? <Editor {...{ id, title, content, priority, resolved, assignee, updateTodo, onCancel: handleCancelClick }} />
+      ? <Editor {...{
+        id,
+        title,
+        content,
+        priority,
+        resolved,
+        assignee,
+        updateTodo,
+        deleteTodo,
+        onCancel: handleCancelClick }} />
       : <article className={`message ${color}`}>
         <div className="message-header">
           <p>{title}</p>
           <span>
             <FontAwesomeIcon icon={faList} className='is-clickable mr-1' onClick={handleEditClick} />
-            <FontAwesomeIcon icon={faTrashCan} className='is-clickable' />
+            <FontAwesomeIcon icon={faTrashCan} className='is-clickable' onClick={handleDeleteClick}/>
           </span>
         </div>
         <div className="message-body">
