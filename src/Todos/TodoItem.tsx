@@ -2,6 +2,7 @@ import { faList, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, useState } from 'react';
 import { Editor } from './Editor';
+import { TodoItemModel } from './utils/getTodoItems';
 
 export enum Priority {
   HIGH,
@@ -16,9 +17,10 @@ export interface Props {
   priority: Priority;
   assignee?: string;
   resolved: boolean;
+  updateTodo: (id: string, update: Partial<TodoItemModel>) => void;
 }
 
-export const TodoItem: FC<Props> = ({ id, title, content, priority, assignee, resolved }) => {
+export const TodoItem: FC<Props> = ({ id, title, content, priority, assignee, resolved, updateTodo }) => {
   const [editing, setEditing] = useState<boolean>(false);
   const color = resolved ? '' :
     priority === Priority.HIGH ? 'is-danger' :
@@ -30,7 +32,7 @@ export const TodoItem: FC<Props> = ({ id, title, content, priority, assignee, re
 
   return (
     editing
-      ? <Editor {...{ id, title, content, priority, resolved, assignee, onCancel: handleCancelClick }} />
+      ? <Editor {...{ id, title, content, priority, resolved, assignee, updateTodo, onCancel: handleCancelClick }} />
       : <article className={`message ${color}`}>
         <div className="message-header">
           <p>{title}</p>
@@ -45,7 +47,7 @@ export const TodoItem: FC<Props> = ({ id, title, content, priority, assignee, re
           </div>
           <div className="columns is-mobile">
             <div className="column">
-              <span className="has-text-grey-light is-size-7">{id}</span>
+              <span className="has-text-grey-light is-size-7 is-8">{id}</span>
             </div>
             <div className='column has-text-right'>
               {

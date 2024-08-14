@@ -18,6 +18,10 @@ export const Editor: FC<Props> = props => {
     const handleAssigneeChange: ChangeEventHandler<HTMLSelectElement> = e => setAssignee(e.target.value);
     const handleContentChange: ChangeEventHandler<HTMLTextAreaElement> = e => setContent(e.target.value);
     const handleResolvedChange: ChangeEventHandler<HTMLInputElement> = e => setResolved(!resolved);
+    const handleSaveClick = () => {
+        props.updateTodo(props.id, { title, priority, assignee, content, resolved });
+        props.onCancel();
+    }
 
     return (
         <div className="box">
@@ -78,14 +82,13 @@ export const Editor: FC<Props> = props => {
                     <div className="field is-grouped is-grouped-right">
                         <div className="control">
                             <div className="buttons has-addons">
-                                <button className="button is-link">Save</button>
+                                <button className="button is-link" onClick={handleSaveClick}>Save</button>
                                 <button className="button is-link is-light" onClick={props.onCancel}>Cancel</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     );
 }
